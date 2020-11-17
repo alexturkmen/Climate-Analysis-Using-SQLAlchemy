@@ -54,6 +54,8 @@ def prcp():
 
     results = session.query(Measurement.date, Measurement.prcp).filter(Measurement.station == most_active_station).all()
 
+    session.close()
+
     date_prcp = []
 
     for date, prcp in results:
@@ -74,6 +76,8 @@ def stations():
    
     results = session.query(Station.station).all()
 
+    session.close()
+
     all_stations = list(np.ravel(results))
 
     return jsonify(all_stations)
@@ -93,6 +97,8 @@ def tobs():
 
     results = session.query(Measurement.date, Measurement.tobs).\
     filter(Measurement.station == most_active_station).all()
+
+    session.close()
 
     tobs_list = []
 
@@ -118,6 +124,8 @@ def start_date(start):
     if start in dates:
         calc_start = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
         filter(Measurement.date >= start).all()
+
+        session.close()
    
 
         result = list(np.ravel(calc_start))
@@ -150,6 +158,8 @@ def start_end_date(start, end):
 
             calc_start = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
             filter(Measurement.date >= start).filter(Measurement.date <= end).all()
+
+            session.close()
    
             result = list(np.ravel(calc_start))
 
